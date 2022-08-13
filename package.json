@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node scripts/build.js"
+    "build": "node scripts/build.js",
+    "watch": "node scripts/build.js --watch",
+    "dev": "node scripts/build.js --watch --serve"
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,7 @@
   "homepage": "https://github.com/hmak-me/hmak-me#readme",
   "devDependencies": {
     "esbuild": "^0.15.2",
-    "esbuild-sass-plugin": "^2.3.2"
+    "esbuild-sass-plugin": "^2.3.2",
+    "minimist": "^1.2.6"
   }
 }
