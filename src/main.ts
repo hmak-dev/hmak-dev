@@ -1,7 +1,7 @@
-import config from './config.js';
-import { initControls } from './utils.js';
-import Snake from "./snake.js";
-import Matrix from "./matrix.js";
+import config from "./config";
+import { initControls } from './utils/controls';
+import Snake from "./classes/snake";
+import Matrix from "./classes/matrix";
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
