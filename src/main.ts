@@ -1,7 +1,8 @@
 import config from "./config";
-import { initControls } from './utils/controls';
+import {initControls} from './utils/controls';
 import Snake from "./classes/snake";
 import Matrix from "./classes/matrix";
+import Controls from "./classes/controls";
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
@@ -13,41 +14,41 @@ const matrix = new Matrix(width, height);
 const snake = new Snake(matrix);
 
 function draw() {
-    ctx.fillStyle = config.style.backgroundColor;
-    ctx.fillRect(0, 0, width, height);
+	ctx.fillStyle = config.style.backgroundColor;
+	ctx.fillRect(0, 0, width, height);
 
-    matrix.draw(ctx);
+	matrix.draw(ctx);
 
-    snake.draw(ctx);
+	snake.draw(ctx);
 }
 
 function update() {
-    snake.update();
+	snake.update();
 
-    draw();
+	draw();
 }
 
-const interval = setInterval(update, 200);
+const interval = setInterval(update, 100);
 
 draw();
 
 const OPPOSITES = {
-    up: 'down',
-    right: 'left',
-    down: 'up',
-    left: 'right',
+	up: 'down',
+	right: 'left',
+	down: 'up',
+	left: 'right',
 };
 
-initControls((dir) => {
-    const snakeHead = snake.head;
-    const cell = matrix.getCell(snakeHead.x, snakeHead.y);
+new Controls((dir) => {
+	const snakeHead = snake.head;
+	const cell = matrix.getCell(snakeHead.x, snakeHead.y);
 
-    if (
-        !cell.redirect &&
-        dir !== snakeHead.dir &&
-        dir !== OPPOSITES[snakeHead.dir] &&
-        !snake.contains(snakeHead.x, snakeHead.y, true)
-    ) {
-        cell.redirect = dir;
-    }
+	if (
+		!cell.redirect &&
+		dir !== snakeHead.dir &&
+		dir !== OPPOSITES[snakeHead.dir] &&
+		!snake.contains(snakeHead.x, snakeHead.y, true)
+	) {
+		cell.redirect = dir;
+	}
 });

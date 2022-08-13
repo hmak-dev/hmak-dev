@@ -1,11 +1,24 @@
 const config = {
 	board: {
 		cellSize: 20,
-		cellGap: 1,
+		cellWidth: 20,
+		cellHeight: 20,
+		cellGap: 2,
 	},
 	snake: {
 		initialLength: 20,
 		initialDirection: 'right',
+	},
+	controls: {
+		keyboard: {
+			enabled: true,
+			arrows: true,
+			wasd: true,
+		},
+		touch: {
+			enabled: true,
+			threshold: 20,
+		},
 	},
 	style: {
 		backgroundColor: '#9bbf00',
