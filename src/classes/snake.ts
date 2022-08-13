@@ -22,6 +22,7 @@ export type TSnakePiece = { x: number; y: number; dir: TDirection };
 class Snake {
 	matrix: Matrix;
 	snake: TSnakePiece[];
+	deadPieces: TSnakePiece[] = [];
 
 	get head(): TSnakePiece {
 		return this.snake[0];
@@ -74,6 +75,22 @@ class Snake {
 				config.board.cellHeight
 			);
 		});
+
+		const now = Date.now();
+
+		this.deadPieces.forEach(({ x, y, died_at }) => {
+			const opacity = Math.floor(((1000 - (now - died_at)) / 1000) * 255);
+			if (opacity > 0) {
+				ctx.fillStyle = config.style.foregroundColor + opacity.toString(16).padStart(2, '0');
+
+				ctx.fillRect(
+					x * (config.board.cellWidth + config.board.cellGap),
+					y * (config.board.cellHeight + config.board.cellGap),
+					config.board.cellWidth,
+					config.board.cellHeight
+				);
+			}
+		});
 	}
 
 	update() {
@@ -100,12 +117,30 @@ class Snake {
 
 			if (i === 0) {
 				if (this.contains(piece.x, piece.y, true)) {
-					const index = this.snake.slice(1).findIndex((p) => p.x === piece.x && p.y === piece.y);
-
-					this.snake = this.snake.slice(0, index + 2);
+					this.biteSelf();
 				}
 			}
 		}
+	}
+
+	private biteSelf() {
+		const index = this.snake.slice(1).findIndex((p) => p.x === this.head.x && p.y === this.head.y);
+
+		// clear redirects
+		for (let j = index + 2; j < this.snake.length; j++) {
+			const tpiece = this.snake[j];
+			const tcell = this.matrix.getCell(tpiece.x, tpiece.y);
+
+			if (tcell.redirect) {
+				delete tcell.redirect;
+			}
+		}
+
+		const now = Date.now();
+
+		this.deadPieces.push(...this.snake.slice(index + 2).map((piece) => ({ ...piece, died_at: now })));
+
+		this.snake = this.snake.slice(0, index + 2);
 	}
 
 	contains(x: number, y: number, excludeHead = false): boolean {
